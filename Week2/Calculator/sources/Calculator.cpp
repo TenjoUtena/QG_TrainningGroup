@@ -369,9 +369,9 @@ Status Calculate(SqStack* exp_suf, double* e)
 		{
 			str[j++] = exp_suf->elem[i];
 			str[j] = '\0';
-			if (j >= MAXBUFFER)
+			if (j >= MAXBUFFER-1)
 			{
-				printf_s("输入的单个数据过大！");
+				printf_s("输入的单个数据过大！\n");
 				return ERROR;
 			}
 			i++;

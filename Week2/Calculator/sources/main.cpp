@@ -5,7 +5,7 @@
 
 int main()
 {
-	int flag, choice=0,judge=0;
+	int flag, choice=0,judge=0, judge1=0;
 	char exp[MAXSIZE] = {'\0'};
 	double ele, * e = &ele;
 	SqStack* exp_suf = (SqStack*)malloc(sizeof(SqStack));
@@ -24,7 +24,11 @@ int main()
 		switch (choice)
 		{
 		case 1:
-			clearStack(exp_suf);
+			if (judge1 == 1)
+			{
+				clear(exp);
+				FreePointer(exp_suf);
+			}
 			printf_s("请输入中缀表达式：");
 			gets_s(exp);
 			flag = Check_1(exp);
@@ -67,6 +71,7 @@ int main()
 			{
 				judge = 0;
 				printf_s("输入成功！\n");
+				judge1 = 1;
 				break;
 			}
 

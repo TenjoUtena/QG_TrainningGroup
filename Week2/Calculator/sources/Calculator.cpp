@@ -103,7 +103,16 @@ void visit(char e)
 
 void clearStack(SqStack* s)
 {
-		s->top = -1;
+	s->top = -1;
+}
+
+SqStack* FreePointer(SqStack* s)
+{
+	SqStack* p = s;
+	free(p);
+	p = (SqStack*)malloc(sizeof(SqStack));
+	initStack(p,MAXSIZE);
+	return p;
 }
 
 //检查表达式中是否除了含数字，+，-，*，/，（，）,.外还有别的东西
@@ -428,4 +437,12 @@ Status Calculate(SqStack* exp_suf, double* e)
 	}
 	*e = getTopStack_double(inn);
 	return SUCCESS;
+}
+
+void clear(char* str)
+{
+	for (int i = 0; i < MAXSIZE; i++)
+	{
+		str[i] = '\0';
+	}
 }

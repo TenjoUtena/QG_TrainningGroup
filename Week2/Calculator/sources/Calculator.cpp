@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 //打印菜单
 void PrintMenu()
@@ -186,8 +187,8 @@ Status Check_2(char* exp)
 //检查运算符左边是不是数字或者')',右边是不是数字或者'('
 Status Check_3(char* exp)
 {
-	int temp1, temp2, flag = 1;
-	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
+	int temp1, temp2, flag = 1,i;
+	for (i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
 		if (exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/')
 		{
@@ -204,9 +205,28 @@ Status Check_3(char* exp)
 			}
 		}
 	}
+	i = 0;
+	for (i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
+	{
+		if (exp[i] == '-')
+		{
+			temp1 = exp[i - 1];
+			temp2 = exp[i + 1];
+			if (((temp1 >= 48 && temp1 <= 57) || temp1 == 41 || temp1 == 40) &&
+				((temp2 >= 48 && temp2 <= 57) || temp2 == 40))
+				flag = 1;
+			else
+				flag = -1;
+		}
+	}
 	if (flag == 0)
 	{
 		printf_s("+，-，*，/的左边不是是数字或')',或右边不是数字或'('！\n");
+		return ERROR;
+	}
+	if (flag == -1)
+	{
+		printf_s("‘-’的右边是'('\n");
 		return ERROR;
 	}
 	else
@@ -241,6 +261,8 @@ Status Check_4(char* exp)
 	free(inn);
 	return SUCCESS;
 }
+
+//检查小数点两边是否为数字
 Status Check_5(char* exp)
 {
 	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
@@ -288,12 +310,31 @@ Status Check_6(char* exp)
 //中缀表达式转后缀表达式
 SqStack* change(char* exp, SqStack* exp_suf)
 {
+	int j=0;
 	SqStack* inn = (SqStack*)malloc(sizeof(SqStack));
 	initStack(inn, MAXSIZE);
 	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
-		while ((exp[i] >= '0' && exp[i] <= '9')|| exp[i]=='.')
+		while ((exp[i] >= '0' && exp[i] <= '9')|| exp[i]=='.'
+			|| exp[i] == '(')
 		{
+			if (exp[i] == '(' && exp[1 + i] != '-')
+				break;
+			if (exp[i] == '(' && exp[1+i] == '-')
+			{
+				i++;
+				do
+				{
+					pushStack(exp_suf, exp[i]);
+					i++;
+				} while (exp[i] != ')');
+			}
+			if (exp[i] == ')')
+			{
+				pushStack(exp_suf, ' ');
+				i++;
+				break;
+			}
 			pushStack(exp_suf, exp[i]);
 			i++;
 			if ((exp[i] < '0' || exp[i] > '9')&& exp[i] != '.')
@@ -370,12 +411,15 @@ Status Calculate(SqStack* exp_suf, double* e)
 	SqStack_double* inn = (SqStack_double*)malloc(sizeof(SqStack_double));
 	initStack_double(inn, MAXSIZE);
 	double a, b, result;
-	char str[MAXBUFFER];
+	char str[MAXBUFFER], str1[MAXSIZE] = {'\0'};
 	for (int i = 0; i <= exp_suf->top; i++)
 	{
-		while ((exp_suf->elem[i] >= '0' &&
-			exp_suf->elem[i] <= '9')|| exp_suf->elem[i]=='.')
+		while ((exp_suf->elem[i] >= '0' && exp_suf->elem[i] <= '9')||
+			exp_suf->elem[i]=='.'|| exp_suf->elem[i] == '-')
 		{
+			if (exp_suf->elem[i] == '-')
+				if (exp_suf->elem[i + 1] == ' ')
+					break;
 			str[j++] = exp_suf->elem[i];
 			str[j] = '\0';
 			if (j >= MAXBUFFER-1)

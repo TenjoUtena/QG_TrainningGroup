@@ -5,8 +5,8 @@
 
 int main()
 {
-	int flag, choice=0,judge=0, judge1=0;
-	char exp[MAXSIZE] = {'\0'};
+	int flag, choice = 0, judge = 0, judge1 = 0;
+	char exp[MAXSIZE] = { '\0' };
 	double ele, * e = &ele;
 	SqStack* exp_suf = (SqStack*)malloc(sizeof(SqStack));
 	initStack(exp_suf, MAXSIZE);
@@ -15,6 +15,7 @@ int main()
 	PrintMenu();
 	while (choice != 5)
 	{
+		
 		printf_s("你的选择是：");
 		while (scanf_s("%d", &choice) == 0 || getchar() != '\n')
 		{
@@ -27,7 +28,7 @@ int main()
 			if (judge1 == 1)
 			{
 				clear(exp);
-				FreePointer(exp_suf);
+				exp_suf = FreePointer(exp_suf);
 			}
 			printf_s("请输入中缀表达式：");
 			gets_s(exp);
@@ -86,7 +87,7 @@ int main()
 				printf_s("请重新输入中缀表达式！\n");
 				break;
 			}
-			if(judge == 0)
+			if (judge == 0)
 			{
 				exp_suf = change(exp, exp_suf);
 				printf_s("后缀表达式为：\n");
@@ -98,7 +99,6 @@ int main()
 			{
 				printf_s("后缀表达式为：\n");
 				TraverseSqStack(exp_suf, pointer);
-				printf_s("\n");
 				break;
 			}
 

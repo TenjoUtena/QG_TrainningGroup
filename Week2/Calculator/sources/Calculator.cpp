@@ -31,9 +31,9 @@ void PrintMenu()
 //初始化栈
 void initStack(SqStack* s, int sizes)
 {
-		s->elem = (char*)malloc(sizeof(char) * sizes);
-		s->top = -1;
-		s->size = sizes;
+	s->elem = (char*)malloc(sizeof(char) * sizes);
+	s->top = -1;
+	s->size = sizes;
 }
 void initStack_double(SqStack_double* s, int sizes)
 {
@@ -52,18 +52,18 @@ Status isEmptyStack(SqStack* s)
 }
 
 //入栈
- void pushStack(SqStack* s, char data)
+void pushStack(SqStack* s, char data)
 {
 	s->top++;
 	s->elem[s->top] = data;
 }
- void pushStack_double(SqStack_double* s, double data)
- {
-	 s->top++;
-	 s->elem[s->top] = data;
- }
+void pushStack_double(SqStack_double* s, double data)
+{
+	s->top++;
+	s->elem[s->top] = data;
+}
 
- //出栈
+//出栈
 void popStack(SqStack* s)
 {
 	(s->top)--;
@@ -112,7 +112,7 @@ SqStack* FreePointer(SqStack* s)
 	SqStack* p = s;
 	free(p);
 	p = (SqStack*)malloc(sizeof(SqStack));
-	initStack(p,MAXSIZE);
+	initStack(p, MAXSIZE);
 	return p;
 }
 
@@ -124,7 +124,7 @@ Status Check_1(char* exp)
 	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
 		temp = exp[i];
-		if ((temp >= 40 && temp <= 43) ||  (temp >= 45 && temp <= 57))
+		if ((temp >= 40 && temp <= 43) || (temp >= 45 && temp <= 57))
 		{
 			continue;
 		}
@@ -135,10 +135,10 @@ Status Check_1(char* exp)
 		}
 	}
 	if (flag == 0)
-		{
-			printf_s("表达式里面除了含数字，+，-，*，/，（，）,.外还有别的东西哦!\n");
-			return ERROR;
-		}
+	{
+		printf_s("表达式里面除了含数字，+，-，*，/，（，）,.外还有别的东西哦!\n");
+		return ERROR;
+	}
 	if (flag == 1)
 		return SUCCESS;
 }
@@ -168,13 +168,12 @@ Status Check_2(char* exp)
 		}
 	}
 	flag = isEmptyStack(inn);
-	if (flag == 1)
+	if (flag == SUCCESS)
 	{
-		free(inn->elem);
+		//free(inn->elem);
 		free(inn);
 		return SUCCESS;
 	}
-
 	else
 	{
 		printf_s("表达式中缺少匹配的‘)’!\n");
@@ -187,7 +186,7 @@ Status Check_2(char* exp)
 //检查运算符左边是不是数字或者')',右边是不是数字或者'('
 Status Check_3(char* exp)
 {
-	int temp1, temp2, flag = 1,i;
+	int temp1, temp2, flag = 1, i;
 	for (i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
 		if (exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/')
@@ -195,7 +194,7 @@ Status Check_3(char* exp)
 			temp1 = exp[i - 1];
 			temp2 = exp[i + 1];
 			//运算符左边是数字或者是')',右边是数字或者是'('
-			if (((temp1 >= 48 && temp1 <= 57) || temp1 == 41)&&
+			if (((temp1 >= 48 && temp1 <= 57) || temp1 == 41) &&
 				((temp2 >= 48 && temp2 <= 57) || temp2 == 40))
 				continue;
 			else
@@ -244,7 +243,7 @@ Status Check_4(char* exp)
 		if (exp[i] == '(')
 			pushStack(inn, '(');
 		flag = isEmptyStack(inn);
-		if(flag==ERROR && exp[i] != ')')
+		if (flag == ERROR && exp[i] != ')')
 			pushStack(inn, exp[i]);
 		if (exp[i] == ')')
 		{
@@ -290,7 +289,7 @@ Status Check_6(char* exp)
 	int flag = 0;
 	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
-		if ((exp[i] >= 48 && exp[i] <= 57)|| exp[i]=='.')
+		if ((exp[i] >= 48 && exp[i] <= 57) || exp[i] == '.')
 			continue;
 		else
 		{
@@ -310,17 +309,17 @@ Status Check_6(char* exp)
 //中缀表达式转后缀表达式
 SqStack* change(char* exp, SqStack* exp_suf)
 {
-	int j=0;
+	int j = 0;
 	SqStack* inn = (SqStack*)malloc(sizeof(SqStack));
 	initStack(inn, MAXSIZE);
 	for (int i = 0; exp[i] != '\0' || i > MAXSIZE; i++)
 	{
-		while ((exp[i] >= '0' && exp[i] <= '9')|| exp[i]=='.'
+		while ((exp[i] >= '0' && exp[i] <= '9') || exp[i] == '.'
 			|| exp[i] == '(')
 		{
 			if (exp[i] == '(' && exp[1 + i] != '-')
 				break;
-			if (exp[i] == '(' && exp[1+i] == '-')
+			if (exp[i] == '(' && exp[1 + i] == '-')
 			{
 				i++;
 				do
@@ -337,7 +336,7 @@ SqStack* change(char* exp, SqStack* exp_suf)
 			}
 			pushStack(exp_suf, exp[i]);
 			i++;
-			if ((exp[i] < '0' || exp[i] > '9')&& exp[i] != '.')
+			if ((exp[i] < '0' || exp[i] > '9') && exp[i] != '.')
 			{
 				pushStack(exp_suf, ' ');
 				break;
@@ -347,7 +346,7 @@ SqStack* change(char* exp, SqStack* exp_suf)
 		{
 			while (getTopStack(inn) != '(')
 			{
-				pushStack(exp_suf,getTopStack(inn));
+				pushStack(exp_suf, getTopStack(inn));
 				popStack(inn);
 				pushStack(exp_suf, ' ');
 
@@ -370,7 +369,7 @@ SqStack* change(char* exp, SqStack* exp_suf)
 						popStack(inn);
 						pushStack(exp_suf, ' ');
 					}
-				} while (isEmptyStack(inn) == ERROR&& getTopStack(inn) != '(');
+				} while (isEmptyStack(inn) == ERROR && getTopStack(inn) != '(');
 				pushStack(inn, exp[i]);
 			}
 		}
@@ -407,22 +406,22 @@ SqStack* change(char* exp, SqStack* exp_suf)
 //计算结果
 Status Calculate(SqStack* exp_suf, double* e)
 {
-	int j=0;
+	int j = 0;
 	SqStack_double* inn = (SqStack_double*)malloc(sizeof(SqStack_double));
 	initStack_double(inn, MAXSIZE);
 	double a, b, result;
-	char str[MAXBUFFER], str1[MAXSIZE] = {'\0'};
+	char str[MAXBUFFER], str1[MAXSIZE] = { '\0' };
 	for (int i = 0; i <= exp_suf->top; i++)
 	{
-		while ((exp_suf->elem[i] >= '0' && exp_suf->elem[i] <= '9')||
-			exp_suf->elem[i]=='.'|| exp_suf->elem[i] == '-')
+		while ((exp_suf->elem[i] >= '0' && exp_suf->elem[i] <= '9') ||
+			exp_suf->elem[i] == '.' || exp_suf->elem[i] == '-')
 		{
 			if (exp_suf->elem[i] == '-')
 				if (exp_suf->elem[i + 1] == ' ')
 					break;
 			str[j++] = exp_suf->elem[i];
 			str[j] = '\0';
-			if (j >= MAXBUFFER-1)
+			if (j >= MAXBUFFER - 1)
 			{
 				printf_s("输入的单个数据过大！\n");
 				return ERROR;
@@ -430,7 +429,7 @@ Status Calculate(SqStack* exp_suf, double* e)
 			i++;
 			if (exp_suf->elem[i] == ' ')
 			{
-				a =atof(str);
+				a = atof(str);
 				pushStack_double(inn, a);
 				j = 0;
 				break;

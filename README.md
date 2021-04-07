@@ -9,6 +9,8 @@ the third commit - Reslove the issue that the stack of postfix expressions do no
 
 the fourth commit - Reslove the issue that negative numbers detect errors
 
+the fifth commit - Reslove the issue that CLS flash back
+
 
 bug:
 
